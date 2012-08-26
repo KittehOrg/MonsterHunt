@@ -39,21 +39,27 @@ public class RewardManager {
         }
         String RewardString;
 
+        final boolean enableReward=world.settings.getBoolean(Setting.EnableReward);
+        Util.Debug("EnabledReward="+enableReward);
         //Normal reward
-        if (world.settings.getBoolean(Setting.EnableReward)) {
+        if (enableReward) {
             for (int place = 0; place < num; place++) {
+                Util.Debug("Checking place "+place);
                 if (Winners[place].size() < 1)
                     continue;
                 score = Winners[place].get(Winners[place].keySet().toArray()[0]);
-                Util.Debug(String.valueOf(score));
-                Util.Debug(String.valueOf(world.settings.getPlaceInt(Setting.MinimumPointsPlace, place + 1)));
-                if (score < world.settings.getPlaceInt(Setting.MinimumPointsPlace, place + 1)) {
-                    Winners[place].clear();
+                Util.Debug("score="+String.valueOf(score));
+                Util.Debug("minscore="+String.valueOf(world.settings.getPlaceInt(Setting.MinimumPointsPlace, place + 1)));
+                if (score >= world.settings.getPlaceInt(Setting.MinimumPointsPlace, place + 1)) {
+//                    Winners[place].clear();
+                    Util.Debug("score is >= minscore");
                     for (String i : Winners[place].keySet()) {
+                        Util.Debug("i="+i);
                         RewardString = world.settings.getPlaceString(Setting.RewardParametersPlace, place + 1);
                         if (RewardString.contains(";")) {
                             RewardString = PickRandom(RewardString);
                         }
+                        Util.Debug("RewardString="+RewardString);
                         Reward(i, RewardString, world, score);
                     }
                 }
@@ -106,13 +112,15 @@ public class RewardManager {
     }
 
     private static void Reward(String playerstring, String RewardString, MonsterHuntWorld world, int score) {
+    	Util.Debug("Rewarding "+playerstring);
+    	Util.Debug("RewardString="+RewardString);
         String[] split = RewardString.split(",");
         Player player = plugin.getServer().getPlayer(playerstring);
         if (player == null)
             return;
         String items = "";
         for (String i2 : split) {
-            Util.Debug(i2);
+            Util.Debug("Reward i2="+i2);
             //Parse block ID
             String BlockIdString = i2.substring(0, i2.indexOf(" "));
             short data;
@@ -155,11 +163,13 @@ public class RewardManager {
 
                 //give reward
                 if (BlockId == 0) {
+                	Util.Debug("rewarding iConomy amount="+amount);
                     String item = iConomyReward(playerstring, amount);
                     if (amount > 0) {
                         items += item + ", ";
                     }
                 } else {
+                	Util.Debug("rewarding blockId of "+BlockId+", amount="+amount+", data="+data);
                     addItemFix(player, BlockId, amount, data);
                     if (amount > 0) {
                         items += String.valueOf(amount) + "x " + getMaterialName(Material.getMaterial(BlockId)) + ", ";
