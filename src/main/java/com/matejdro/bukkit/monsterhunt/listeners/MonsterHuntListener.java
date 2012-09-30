@@ -38,6 +38,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -273,9 +274,18 @@ public class MonsterHuntListener implements Listener {
             if (!world.settings.getBoolean(Setting.OnlyCountMobsSpawnedOutside)) {
                 return;
             }
+            
+            // not properly spawned if spawned from a spawner
+            if( event.getSpawnReason() == SpawnReason.SPAWNER )
+                return;
+            if( event.getSpawnReason() == SpawnReason.SPAWNER_EGG )
+                return;
+            
             Block block = event.getLocation().getBlock();
             int number = 0;
-            while (block.getY() < 125) {
+            Block highest = block.getLocation().getWorld().getHighestBlockAt(block.getLocation());
+            int maxY = highest.getLocation().getBlockY();
+            while (block.getY() < maxY) {
                 number++;
                 block = block.getRelative(BlockFace.UP);
                 boolean empty = false;
