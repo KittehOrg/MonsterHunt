@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Timer;
 
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.matejdro.bukkit.monsterhunt.commands.HuntCommand;
@@ -33,9 +32,6 @@ public class MonsterHunt extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        PluginDescriptionFile pdfFile = getDescription();
-        String version = pdfFile.getVersion();
-        this.getLogger().info("v" + version + "Loaded!");
         initialize();
 
         InputOutput.LoadSettings();
