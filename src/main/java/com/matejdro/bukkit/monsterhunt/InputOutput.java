@@ -192,11 +192,8 @@ public class InputOutput {
         try {
             Settings.globals.load(new File("plugins" + File.separator + "MonsterHunt" + File.separator, "global.txt"));
         } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
         } catch (IOException e1) {
-            e1.printStackTrace();
         } catch (InvalidConfigurationException e1) {
-            e1.printStackTrace();
         }
 
         for (String i : new String[] { "Zombie", "Skeleton", "Creeper", "Spider", "Ghast", "Slime", "ZombiePigman", "Giant", "TamedWolf", "WildWolf", "ElectrifiedCreeper", "Player", "Enderman", "Silverfish", "CaveSpider", "EnderDragon", "MagmaCube", "Blaze" }) {
